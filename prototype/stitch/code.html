@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Ops Studio - Audit Log</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-tertiary": "#2e3037",
+                        "surface": "#121316",
+                        "secondary-container": "#00bde4",
+                        "on-primary": "#412d00",
+                        "on-tertiary-container": "#404249",
+                        "on-primary-fixed": "#271900",
+                        "inverse-surface": "#e3e2e5",
+                        "outline": "#9b8f7e",
+                        "secondary-fixed-dim": "#41d7ff",
+                        "tertiary-fixed": "#e2e2eb",
+                        "on-secondary": "#003542",
+                        "on-error": "#690005",
+                        "surface-container-lowest": "#0d0e11",
+                        "outline-variant": "#4e4637",
+                        "primary": "#f4c367",
+                        "background": "#121316",
+                        "tertiary-container": "#aeaeb7",
+                        "surface-container-highest": "#343538",
+                        "primary-fixed": "#ffdea6",
+                        "on-primary-container": "#583e00",
+                        "secondary-fixed": "#b4ebff",
+                        "inverse-on-surface": "#2f3033",
+                        "surface-tint": "#f0bf64",
+                        "on-background": "#e3e2e5",
+                        "on-error-container": "#ffdad6",
+                        "on-surface-variant": "#d2c5b2",
+                        "tertiary": "#c9c9d2",
+                        "on-tertiary-fixed": "#191b22",
+                        "surface-variant": "#343538",
+                        "on-tertiary-fixed-variant": "#45464e",
+                        "on-secondary-container": "#004858",
+                        "secondary": "#52d9ff",
+                        "error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#004e5f",
+                        "error": "#ffb4ab",
+                        "inverse-primary": "#7c5800",
+                        "surface-container": "#1e2022",
+                        "primary-fixed-dim": "#f0bf64",
+                        "surface-bright": "#38393c",
+                        "surface-container-high": "#292a2d",
+                        "primary-container": "#d6a84f",
+                        "tertiary-fixed-dim": "#c5c6ce",
+                        "on-primary-fixed-variant": "#5e4200",
+                        "on-secondary-fixed": "#001f28",
+                        "surface-dim": "#121316",
+                        "on-surface": "#e3e2e5",
+                        "surface-container-low": "#1a1c1e"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    spacing: {
+                        "sm": "8px",
+                        "xl": "40px",
+                        "gutter": "20px",
+                        "xs": "4px",
+                        "container-max": "1440px",
+                        "lg": "24px",
+                        "md": "16px",
+                        "base": "4px"
+                    },
+                    fontFamily: {
+                        "body-lg": ["Geist"],
+                        "label-sm": ["Geist"],
+                        "headline-md": ["Space Grotesk"],
+                        "headline-lg-mobile": ["Space Grotesk"],
+                        "headline-lg": ["Space Grotesk"],
+                        "display-lg": ["Space Grotesk"],
+                        "label-md": ["Geist"],
+                        "mono-technical": ["Geist"],
+                        "body-md": ["Geist"]
+                    },
+                    fontSize: {
+                        "body-lg": ["18px", { lineHeight: "1.6", fontWeight: "400" }],
+                        "label-sm": ["12px", { lineHeight: "1.2", letterSpacing: "0.1em", fontWeight: "600" }],
+                        "headline-md": ["24px", { lineHeight: "1.3", fontWeight: "500" }],
+                        "headline-lg-mobile": ["24px", { lineHeight: "1.2", fontWeight: "600" }],
+                        "headline-lg": ["32px", { lineHeight: "1.2", letterSpacing: "-0.01em", fontWeight: "600" }],
+                        "display-lg": ["48px", { lineHeight: "1.1", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "label-md": ["14px", { lineHeight: "1.4", letterSpacing: "0.05em", fontWeight: "500" }],
+                        "mono-technical": ["13px", { lineHeight: "1.5", fontWeight: "400" }],
+                        "body-md": ["16px", { lineHeight: "1.5", fontWeight: "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #050608; color: #e3e2e5; }
+        .glass-panel {
+            background-color: rgba(18, 19, 22, 0.6); /* surface with opacity */
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .tech-glow-primary {
+            box-shadow: 0 0 20px rgba(244, 195, 103, 0.15); /* primary */
+        }
+        .tech-glow-secondary {
+            box-shadow: 0 0 20px rgba(82, 217, 255, 0.15); /* secondary */
+        }
+        .separator-line {
+            height: 1px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.1), transparent);
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        .status-dot.green { background-color: #4ade80; box-shadow: 0 0 8px #4ade80; }
+        .status-dot.amber { background-color: #f59e0b; box-shadow: 0 0 8px #f59e0b; }
+        .status-dot.red { background-color: #ef4444; box-shadow: 0 0 8px #ef4444; }
+        .status-dot.cyan { background-color: #52d9ff; box-shadow: 0 0 8px #52d9ff; }
+        .clipped-corner {
+            clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+        }
+    </style>
+</head>
+<body class="font-body-md">
+<div class="relative flex size-full min-h-screen flex-col bg-[#050608] dark group/design-root overflow-x-hidden">
+<div class="flex h-screen w-full">
+<!-- Left Sidebar -->
+<aside class="glass-panel flex h-full w-72 flex-col justify-between p-lg rounded-r-xl border-l-0 border-y-0 shrink-0">
+<div>
+<div class="mb-xl flex items-center gap-md">
+<div class="flex size-10 items-center justify-center rounded-lg bg-primary/20 text-primary tech-glow-primary">
+<span class="material-symbols-outlined">hub</span>
+</div>
+<div>
+<h1 class="font-display-lg text-display-lg font-bold text-primary tracking-tighter text-xl">AI Ops Studio</h1>
+<p class="text-xs text-on-surface-variant uppercase tracking-widest">Command Center</p>
+</div>
+</div>
+<button class="w-full mb-lg flex items-center justify-center gap-sm rounded-lg bg-primary px-md py-3 text-on-primary font-bold text-label-md hover:bg-primary-fixed-dim transition-all tech-glow-primary">
+<span class="material-symbols-outlined text-[20px]">add_circle</span>
+<span>New Session</span>
+</button>
+<nav class="flex flex-col gap-xs">
+<p class="px-sm pb-sm text-label-sm uppercase text-on-surface-variant">Workspaces</p>
+<a class="flex items-center gap-md rounded-lg px-md py-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined">forum</span>
+<span>Mass Chat</span>
+</a>
+<a class="flex items-center gap-md rounded-lg px-md py-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined">code_blocks</span>
+<span>Repository</span>
+</a>
+<a class="flex items-center gap-md rounded-lg px-md py-sm text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" href="#">
+<span class="material-symbols-outlined">travel_explore</span>
+<span>Browser</span>
+</a>
+<a class="flex items-center gap-md rounded-lg bg-primary/10 px-md py-sm text-primary border border-primary/20 tech-glow-primary" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span>Audit Log</span>
+</a>
+</nav>
+<div class="separator-line my-lg"></div>
+<nav class="flex flex-col gap-sm">
+<p class="px-sm pb-sm text-label-sm uppercase text-on-surface-variant">Providers</p>
+<div class="flex items-center justify-between rounded-lg px-md py-sm bg-surface-container-low">
+<div class="flex items-center gap-sm"><div class="status-dot green"></div><span class="text-sm">Gemini</span></div><span class="text-xs text-green-400">Online</span>
+</div>
+<div class="flex items-center justify-between rounded-lg px-md py-sm bg-surface-container-low">
+<div class="flex items-center gap-sm"><div class="status-dot green"></div><span class="text-sm">OpenAI</span></div><span class="text-xs text-green-400">Online</span>
+</div>
+<div class="flex items-center justify-between rounded-lg px-md py-sm bg-surface-container-low">
+<div class="flex items-center gap-sm"><div class="status-dot amber"></div><span class="text-sm">Ollama</span></div><span class="text-xs text-amber-400">Local</span>
+</div>
+<div class="flex items-center justify-between rounded-lg px-md py-sm bg-surface-container-low opacity-60">
+<div class="flex items-center gap-sm"><div class="status-dot red"></div><span class="text-sm">Claude</span></div><span class="text-xs text-red-400">Off</span>
+</div>
+</nav>
+</div>
+<div class="space-y-md">
+<div class="rounded-lg bg-surface-container-low p-md border border-outline-variant">
+<p class="text-label-sm uppercase text-on-surface-variant mb-sm">System Status</p>
+<div class="space-y-sm">
+<div class="flex justify-between text-sm"><span>Cerber</span><span class="text-green-400">Active</span></div>
+<div class="flex justify-between text-sm"><span>Guardian</span><span class="text-green-400">Active</span></div>
+<div class="flex justify-between text-sm"><span>Lasuch</span><span class="text-amber-400">Scan</span></div>
+</div>
+</div>
+<button class="flex w-full items-center gap-md rounded-lg px-md py-sm text-on-surface-variant hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">settings</span><span>Settings</span>
+</button>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto p-lg">
+<div class="mx-auto max-w-[1440px] space-y-lg">
+<!-- Header -->
+<header class="flex items-center justify-between">
+<div>
+<div class="flex items-center gap-sm text-label-sm uppercase text-secondary mb-xs">
+<span class="material-symbols-outlined text-[16px]">verified_user</span>
+<span>Audit Workspace</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">System Audit Log</h2>
+<p class="text-on-surface-variant mt-xs">Track decisions, model responses, and operator actions.</p>
+</div>
+<div class="flex items-center gap-md">
+<div class="glass-panel rounded-lg px-md py-sm flex items-center gap-sm">
+<div class="status-dot green"></div>
+<span class="text-sm font-medium">SAFE</span>
+</div>
+<button class="rounded-lg border border-secondary/50 px-md py-sm text-secondary hover:bg-secondary/10 transition-colors">Export</button>
+</div>
+</header>
+<!-- Stats Grid -->
+<section class="grid grid-cols-4 gap-md">
+<div class="glass-panel rounded-xl p-lg">
+<p class="text-label-sm uppercase text-on-surface-variant">Events Today</p>
+<p class="font-headline-lg text-3xl text-on-surface mt-sm">248</p>
+<p class="text-xs text-green-400 mt-xs">+12% from yesterday</p>
+</div>
+<div class="glass-panel rounded-xl p-lg">
+<p class="text-label-sm uppercase text-on-surface-variant">PASS</p>
+<p class="font-headline-lg text-3xl text-green-400 mt-sm">201</p>
+<p class="text-xs text-on-surface-variant mt-xs">81% approval rate</p>
+</div>
+<div class="glass-panel rounded-xl p-lg">
+<p class="text-label-sm uppercase text-on-surface-variant">HOLD</p>
+<p class="font-headline-lg text-3xl text-amber-400 mt-sm">39</p>
+<p class="text-xs text-on-surface-variant mt-xs">Needs operator review</p>
+</div>
+<div class="glass-panel rounded-xl p-lg">
+<p class="text-label-sm uppercase text-on-surface-variant">REJECT</p>
+<p class="font-headline-lg text-3xl text-red-400 mt-sm">8</p>
+<p class="text-xs text-on-surface-variant mt-xs">Blocked execution</p>
+</div>
+</section>
+<!-- Audit Table -->
+<section class="glass-panel rounded-xl overflow-hidden">
+<div class="flex items-center justify-between border-b border-white/10 p-lg">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Recent Events</h3>
+<p class="text-sm text-on-surface-variant">Structured operational event stream</p>
+</div>
+<div class="flex gap-sm">
+<input class="bg-[#050608] border border-outline-variant rounded-lg px-md py-sm text-sm text-on-surface focus:border-secondary focus:ring-secondary" placeholder="Search events..." type="text"/>
+<button class="rounded-lg bg-surface-container-high px-md py-sm text-sm hover:bg-surface-container-highest">Filter</button>
+</div>
+</div>
+<table class="w-full text-left">
+<thead class="bg-surface-container-low text-label-sm uppercase text-on-surface-variant">
+<tr>
+<th class="px-lg py-md font-semibold">Time</th>
+<th class="px-lg py-md font-semibold">Event</th>
+<th class="px-lg py-md font-semibold">Provider</th>
+<th class="px-lg py-md font-semibold">Decision</th>
+<th class="px-lg py-md font-semibold">Risk</th>
+<th class="px-lg py-md font-semibold">Operator</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-white/5">
+<tr class="hover:bg-white/[0.02] transition-colors">
+<td class="px-lg py-md text-sm text-on-surface-variant font-mono">14:32:18</td>
+<td class="px-lg py-md"><span class="font-medium">model.response.validated</span><p class="text-xs text-on-surface-variant">Mass chat response check</p></td>
+<td class="px-lg py-md text-sm">Gemini 2.5</td>
+<td class="px-lg py-md"><span class="rounded bg-green-500/10 px-sm py-xs text-xs font-bold text-green-400">PASS</span></td>
+<td class="px-lg py-md"><span class="text-green-400">Low</span></td>
+<td class="px-lg py-md text-sm text-on-surface-variant">Karen</td>
+</tr>
+<tr class="hover:bg-white/[0.02] transition-colors">
+<td class="px-lg py-md text-sm text-on-surface-variant font-mono">14:29:04</td>
+<td class="px-lg py-md"><span class="font-medium">prompt.injection.detected</span><p class="text-xs text-on-surface-variant">External page contained suspicious instruction</p></td>
+<td class="px-lg py-md text-sm">Browser</td>
+<td class="px-lg py-md"><span class="rounded bg-amber-500/10 px-sm py-xs text-xs font-bold text-amber-400">HOLD</span></td>
+<td class="px-lg py-md"><span class="text-amber-400">Medium</span></td>
+<td class="px-lg py-md text-sm text-on-surface-variant">Pending</td>
+</tr>
+<tr class="hover:bg-white/[0.02] transition-colors">
+<td class="px-lg py-md text-sm text-on-surface-variant font-mono">14:21:57</td>
+<td class="px-lg py-md"><span class="font-medium">repo.diff.generated</span><p class="text-xs text-on-surface-variant">Coding workspace proposed file changes</p></td>
+<td class="px-lg py-md text-sm">Codex-style</td>
+<td class="px-lg py-md"><span class="rounded bg-blue-500/10 px-sm py-xs text-xs font-bold text-blue-400">REVIEW</span></td>
+<td class="px-lg py-md"><span class="text-amber-400">Medium</span></td>
+<td class="px-lg py-md text-sm text-on-surface-variant">Karen</td>
+</tr>
+<tr class="hover:bg-white/[0.02] transition-colors">
+<td class="px-lg py-md text-sm text-on-surface-variant font-mono">14:18:11</td>
+<td class="px-lg py-md"><span class="font-medium">external.action.blocked</span><p class="text-xs text-on-surface-variant">Provider attempted unsafe downstream action</p></td>
+<td class="px-lg py-md text-sm">Agent</td>
+<td class="px-lg py-md"><span class="rounded bg-red-500/10 px-sm py-xs text-xs font-bold text-red-400">REJECT</span></td>
+<td class="px-lg py-md"><span class="text-red-400">High</span></td>
+<td class="px-lg py-md text-sm text-on-surface-variant">System</td>
+</tr>
+</tbody>
+</table>
+</section>
+</div>
+</main>
+<!-- Right Control Panel -->
+<aside class="glass-panel h-full w-96 p-lg border-r-0 border-y-0 rounded-l-xl shrink-0 overflow-y-auto">
+<div class="mb-lg">
+<p class="text-label-sm uppercase text-secondary mb-xs">Control Layer</p>
+<h2 class="font-headline-md text-headline-md text-secondary font-bold">ALFA CONTROL</h2>
+</div>
+<div class="space-y-md">
+<div class="glass-panel rounded-xl p-md border-secondary/20 tech-glow-secondary">
+<div class="flex items-center justify-between mb-sm">
+<h3 class="font-label-sm text-label-sm uppercase text-on-surface-variant">Intent Check</h3>
+<span class="rounded bg-green-500/10 px-sm py-xs text-xs text-green-400">PASS</span>
+</div>
+<p class="text-sm text-on-surface">User intent remains consistent with current workspace.</p>
+</div>
+<div class="glass-panel rounded-xl p-md">
+<div class="flex items-center justify-between mb-sm">
+<h3 class="font-label-sm text-label-sm uppercase text-on-surface-variant">Provider Scan</h3>
+<span class="rounded bg-amber-500/10 px-sm py-xs text-xs text-amber-400">REVIEW</span>
+</div>
+<div class="space-y-sm text-sm">
+<div class="flex justify-between"><span>Cloud models</span><span class="text-green-400">3 online</span></div>
+<div class="flex justify-between"><span>Local models</span><span class="text-amber-400">1 active</span></div>
+<div class="flex justify-between"><span>Custom endpoints</span><span class="text-on-surface-variant">0</span></div>
+</div>
+</div>
+<div class="glass-panel rounded-xl p-md">
+<div class="flex items-center justify-between mb-sm">
+<h3 class="font-label-sm text-label-sm uppercase text-on-surface-variant">Prompt Injection Scan</h3>
+<span class="rounded bg-green-500/10 px-sm py-xs text-xs text-green-400">CLEAR</span>
+</div>
+<p class="text-sm text-on-surface-variant">No suspicious override instructions detected in current input.</p>
+</div>
+<div class="glass-panel rounded-xl p-md">
+<div class="flex items-center justify-between mb-sm">
+<h3 class="font-label-sm text-label-sm uppercase text-on-surface-variant">Risk Notes</h3>
+<span class="rounded bg-blue-500/10 px-sm py-xs text-xs text-blue-400">INFO</span>
+</div>
+<ul class="space-y-xs text-sm text-on-surface-variant">
+<li>• Multi-provider comparison enabled.</li>
+<li>• Human approval required for external actions.</li>
+<li>• Audit event will be stored before execution.</li>
+</ul>
+</div>
+<div class="glass-panel rounded-xl p-md clipped-corner">
+<h3 class="font-label-sm text-label-sm uppercase text-on-surface-variant mb-md flex items-center gap-xs"><span class="material-symbols-outlined text-[16px]">info</span> Audit Context</h3>
+<pre class="text-xs text-secondary whitespace-pre-wrap font-mono bg-[#050608] rounded p-sm border border-secondary/20">{
+  "event": "workspace.audit.preview",
+  "decision": "REVIEW",
+  "operator_required": true,
+  "providers": 4,
+  "timestamp": "live"
+}</pre>
+</div>
+</div>
+</aside>
+</div>
+</div>
+</body></html>
