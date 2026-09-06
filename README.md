@@ -1,104 +1,36 @@
 # ALFA 360 Studio
 
-ALFA 360 Studio is a multi-agent AI operations workbench.
+> **Static HTML prototype for a multi-agent operations workbench concept**
 
-It combines model comparison, project-aware coding workflows, browser inspection, AI output validation, prompt-injection scanning, audit logging, and human-in-the-loop control.
+This repository currently contains a design/prototype artifact at
+`prototype/stitch/code.html` and a project description. It does not include a
+package manifest, backend, model integration, tests or deployment
+configuration.
 
-This project is not a clone of Google AI Studio, Claude Code, Codex, Gemini, or any commercial product.
-
-It is an ALFA-native control environment for working with multiple AI systems safely.
-
-## Product Positioning
-
-This repository may explore workflow patterns commonly found in modern AI developer environments:
-
-- playground-style prompt testing,
-- multi-model comparison,
-- project and repository context,
-- coding-agent workflows,
-- browser inspection,
-- local model routing,
-- cloud model routing,
-- audit and validation layers.
-
-The product identity, architecture, safety layer, UI language, and execution model must remain ALFA-native.
-
-Do not copy branding, UI assets, logos, product names, protected layouts, or proprietary UX text from Google, OpenAI, Anthropic, or any other provider.
-
-## Core Idea
-
-One prompt can be sent to many models.
-
-No model output is trusted automatically.
-
-Every output can pass through the ALFA 360 Control Layer before it becomes a decision, stored memory, public content, or downstream action.
-
-## Planned Modules
-
-- Provider Registry
-- Mass Chat
-- Single Model Chat
-- Repository Workspace
-- Browser Workspace
-- Tonoyan Filters
-- Cerber Decision Gate
-- Lasuch Prompt-Injection Scanner
-- Guardian Monitoring
-- Audit Log
-- Human Review Queue
-
-## Safety Model
+## Contents and use
 
 ```text
-User intent
-  -> model/provider selection
-  -> AI output
-  -> validation layer
-  -> PASS / HOLD / REJECT
-  -> audit event
-  -> human/operator decision
-  -> controlled action
+prototype/stitch/code.html   standalone HTML prototype
+README.md                    project overview
 ```
 
-## Provider Onboarding
+Open `prototype/stitch/code.html` in a browser to inspect the current design.
+Because it is a static prototype, no installation step is required.
 
-New providers must follow:
+## Status and limitations
 
-```text
-Discover -> Review -> Sandbox -> Register -> Enable
-```
+The project describes possible workbench capabilities such as model comparison,
+browser inspection, validation and audit logging, but the tracked source does
+not implement a complete service for those claims. Treat the page as a design
+artifact rather than an operational control environment.
 
-No unreviewed provider, plugin, or external model connector should be enabled automatically in production.
+## Future implementation
 
-## MVP Scope
+Before adding providers or browser automation, define the execution model,
+consent flow, audit-data retention, access control and tested error handling.
+Use a documented `.env.example` with placeholders only for any external
+credential.
 
-### Phase 1
+## Licence
 
-- Provider Registry
-- OpenAI-compatible provider interface
-- Gemini provider
-- Anthropic provider
-- Ollama/local provider
-- Mass Chat
-- Response comparison
-- Audit log JSONL
-- Manual PASS / HOLD / REJECT
-
-### Phase 2
-
-- Tonoyan Filters integration
-- Cerber automated decision gate
-- Prompt injection scanner
-- Repository workspace
-- Browser snapshot workspace
-
-### Phase 3
-
-- Human review queue
-- Project memory
-- WordPress / GitHub connectors
-- Local deployment package
-
-## Status
-
-Architecture draft / MVP planning.
+No licence file is present.
